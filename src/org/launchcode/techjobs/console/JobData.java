@@ -70,19 +70,48 @@ public class JobData {
         // load data, if not already loaded
         loadData();
 
+        String upperSearchValue = value.toUpperCase();
+
         ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
 
         for (HashMap<String, String> row : allJobs) {
 
             String aValue = row.get(column);
+            String aUpperValue = aValue.toUpperCase();
 
-            if (aValue.contains(value)) {
+            if (aUpperValue.contains(upperSearchValue)) {
                 jobs.add(row);
             }
         }
 
         return jobs;
     }
+
+
+    public static ArrayList<HashMap<String, String>> findByValue(String searchValue) {
+
+        // load data, if not already loaded
+        loadData();
+
+        String upperSearchValue = searchValue.toUpperCase();
+
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {  // iterate through each job; row = a single a job entry
+            for (String key : row.keySet()) {          // iterate through each field; key = a single field in the job entry
+                String keyValue = row.get(key);        // keyValue = the value of the key of the single job entry
+                String upperKeyValue = keyValue.toUpperCase();
+                if (upperKeyValue.contains(upperSearchValue)) {
+                    if (!jobs.contains(row)) {
+                        jobs.add(row);
+                    }
+                }
+            }
+        }
+
+        return jobs;
+    }
+
 
     /**
      * Read in data from a CSV file and store it in a list
